@@ -1,0 +1,35 @@
+{
+  "name": "china-form",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Сайт с базой данных",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "gulp": "gulp",
+    "dev:full": "concurrently \"npm run dev\" \"gulp\""
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.0",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^8.0.0",
+    "del": "^8.0.1",
+    "gulp": "^5.0.1",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^2.1.0",
+    "gulp-sass": "^6.0.1",
+    "gulp-terser": "^2.1.0",
+    "nodemon": "^3.0.0",
+    "sass": "^1.96.0"
+  }
+}

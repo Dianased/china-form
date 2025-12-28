@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../app"
+		},
+		{
+			"path": "../middleware"
+		},
+		{
+			"path": "../node_modules"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../routes"
+		}
+	],
+	"settings": {}
+}
