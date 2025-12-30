@@ -1,24 +1,27 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { pool } from "./db.js";
+import "dotenv/config";
+import { readFileSync } from "fs";
+import pkg from "pg";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { Client } = pkg;
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // для Railway
+});
 
 async function runMigration() {
   try {
-    const sql = fs.readFileSync(
-      path.join(__dirname, "migrations", "001_create_leads_table.sql"),
-      "utf-8"
-    );
+    await client.connect();
+    console.log("✅ Connected to database");
 
-    await pool.query(sql);
-    console.log("✅ Migration applied successfully");
-    process.exit(0);
+    const sql = readFileSync("./migrations/001_create_leads.sql", "utf8");
+
+    await client.query(sql);
+    console.log("✅ Migration applied");
   } catch (err) {
-    console.error("❌ Migration failed:", err);
-    process.exit(1);
+    console.error("❌ Migration failed:", err.message);
+  } finally {
+    await client.end();
   }
 }
 
