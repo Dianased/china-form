@@ -1,29 +1,24 @@
-// run-migration.js
-import { readFileSync } from "fs";
-import { Client } from "pg";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { pool } from "./db.js";
 
-const client = new Client({
-  host: process.env.PGHOST,
-  port: process.env.PGPORT,
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  ssl: { rejectUnauthorized: false }, // ✅ для Railway
-});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function runMigration() {
   try {
-    await client.connect();
-    console.log("✅ Подключились к базе данных");
+    const sql = fs.readFileSync(
+      path.join(__dirname, "migrations", "001_create_leads.sql"),
+      "utf-8"
+    );
 
-    const sql = readFileSync("./migrations/001_create_leads_table.sql", "utf8");
-
-    await client.query(sql);
-    console.log('✅ Таблица "leads" создана или уже существует');
+    await pool.query(sql);
+    console.log("✅ Migration applied successfully");
+    process.exit(0);
   } catch (err) {
-    console.error("❌ Ошибка миграции:", err);
-  } finally {
-    await client.end();
+    console.error("❌ Migration failed:", err);
+    process.exit(1);
   }
 }
 
