@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 async function runMigration() {
   try {
     const sql = fs.readFileSync(
-      path.join(__dirname, "migrations", "001_create_leads.sql"),
+      path.join(__dirname, "migrations", "001_create_leads_table.sql"),
       "utf-8"
     );
 
