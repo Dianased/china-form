@@ -72,7 +72,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
     // 🔹 запись в БД
     await pool.query(
   `INSERT INTO leads (
-    name, email, phone, goal, message,
+    name, email, phone, goal, msg,
     offer_agreement, privacy_agreement, marketing_agreement
   ) VALUES ($1, $2, $3, $4, NULLIF($5, ''), $6, $7, $8)`,
       [
