@@ -4,15 +4,13 @@ import { fileURLToPath } from "url";
 
 const app = express();
 
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // роуты
 import signupRouter from "./routes/signup.js";
 app.use("/api", signupRouter);
