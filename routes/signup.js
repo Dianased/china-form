@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
-    const message = data.message || data.comment || null;
+    const message = data.message ?? null;
 
     // 🔹 определяем ФАКТ прихода чекбоксов
     const hasOfferAgreement =
