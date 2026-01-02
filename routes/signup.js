@@ -23,38 +23,39 @@ router.post("/signup", async (req, res) => {
     }
 
     // обязательные поля
-    if (!name || !email || !phone || !goal || !offer || !privacy) {
-      return res.status(400).json({
-        success: false,
-        message: "Заполните обязательные поля",
-      });
-    }
+ if (
+   !name ||
+   !email ||
+   !phone ||
+   !goal ||
+   !req.body["offer-agreement"] ||
+   !req.body["privacy-agreement"]
+ ) {
+   return res.status(400).json({
+     success: false,
+     message: "Заполните обязательные поля",
+   });
+ }
 
-    await pool.query(
-      `
+await pool.query(
+  `
   INSERT INTO leads (
+    name, email, phone, goal, message,
+    offer_agreement, privacy_agreement, marketing_agreement
+  )
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+  `,
+  [
     name,
     email,
     phone,
     goal,
-    message,
-    offer_agreement,
-    privacy_agreement,
-    marketing_agreement
-  )
-  VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-  `,
-      [
-        name,
-        email,
-        phone,
-        goal,
-        message || null,
-        offerAgreement,
-        privacyAgreement,
-        req.body["marketing-agreement"] === "on",
-      ]
-    );
+    message || null,
+    true,
+    true,
+    !!marketing || false,
+  ]
+);
 
     res.json({
       success: true,
@@ -70,5 +71,6 @@ router.post("/signup", async (req, res) => {
 });
 
 export default router;
+
 
 
