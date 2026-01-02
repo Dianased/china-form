@@ -20,7 +20,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
-    const msg = data.message ?? null;
+    const message = data.msg ?? null;
 
     // 🔹 определяем ФАКТ прихода чекбоксов
     const hasOfferAgreement =
@@ -79,7 +79,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
         email,
         phone,
         goal,
-        msg,
+        message,
         offerAgreement,
         privacyAgreement,
         marketingAgreement,
@@ -100,4 +100,3 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
 });
 
 export default router;
-
