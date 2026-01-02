@@ -69,10 +69,10 @@ router.post("/signup", async (req, res) => {
 
     // 🔹 запись в БД
     await pool.query(
-      `INSERT INTO leads (
-        name, email, phone, goal, message,
-        offer_agreement, privacy_agreement, marketing_agreement
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+  `INSERT INTO leads (
+    name, email, phone, goal, message,
+    offer_agreement, privacy_agreement, marketing_agreement
+  ) VALUES ($1, $2, $3, $4, NULLIF($5, ''), $6, $7, $8)`,
       [
         name,
         email,
