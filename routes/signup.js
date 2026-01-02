@@ -14,39 +14,53 @@ router.post("/signup", async (req, res) => {
       return res.json({ success: true, message: "OK" });
     }
 
-    // 🔹 поддержка разных имён полей с фронта
+    // 🔹 основные поля (поддержка разных имён)
     const name = data.name;
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
     const message = data.message || data.comment || null;
 
-    // 🔹 чекбоксы (поддержка разных name)
-    const offerRaw =
-      data["offer-agreement"] ?? data.offer ?? data.offerAgreement;
+    // 🔹 определяем ФАКТ прихода чекбоксов
+    const hasOfferAgreement =
+      data["offer-agreement"] !== undefined ||
+      data.offer !== undefined ||
+      data.offerAgreement !== undefined;
 
-    const privacyRaw =
-      data["privacy-agreement"] ?? data.privacy ?? data.privacyAgreement;
+    const hasPrivacyAgreement =
+      data["privacy-agreement"] !== undefined ||
+      data.privacy !== undefined ||
+      data.privacyAgreement !== undefined;
 
-    const marketingRaw =
-      data["marketing-agreement"] ??
-      data.marketing ??
-      data.marketingAgreement;
-
+    // 🔹 преобразуем в boolean
     const offerAgreement =
-      offerRaw === "on" || offerRaw === true || offerRaw === "true";
+      data["offer-agreement"] === "on" ||
+      data["offer-agreement"] === "true" ||
+      data.offer === true ||
+      data.offerAgreement === true;
 
     const privacyAgreement =
-      privacyRaw === "on" || privacyRaw === true || privacyRaw === "true";
+      data["privacy-agreement"] === "on" ||
+      data["privacy-agreement"] === "true" ||
+      data.privacy === true ||
+      data.privacyAgreement === true;
 
     const marketingAgreement =
-      marketingRaw === "on" ||
-      marketingRaw === true ||
-      marketingRaw === "true" ||
+      data["marketing-agreement"] === "on" ||
+      data["marketing-agreement"] === "true" ||
+      data.marketing === true ||
+      data.marketingAgreement === true ||
       false;
 
-    // 🔴 проверка обязательных полей
-    if (!name || !email || !phone || !goal || !offerAgreement || !privacyAgreement) {
+    // 🔴 проверка обязательных полей (КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ)
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !goal ||
+      !hasOfferAgreement ||
+      !hasPrivacyAgreement
+    ) {
       return res.status(400).json({
         success: false,
         message: "Заполните обязательные поля",
@@ -63,7 +77,6 @@ router.post("/signup", async (req, res) => {
         name,
         email,
         phone,
-        phone.toString().replace(/\D/g, ""), // нормализация телефона
         goal,
         message,
         offerAgreement,
