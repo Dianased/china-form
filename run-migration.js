@@ -1,28 +1,27 @@
-import "dotenv/config";
 import { readFileSync } from "fs";
-import pkg from "pg";
-
-const { Client } = pkg;
+import { Client } from "pg";
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // для Railway
+  ssl: { rejectUnauthorized: false },
 });
 
 async function runMigration() {
   try {
     await client.connect();
-    console.log("✅ Connected to database");
+    console.log("✅ Connected to DB");
 
     const sql = readFileSync("./migrations/001_create_leads.sql", "utf8");
 
     await client.query(sql);
-    console.log("✅ Migration applied");
+    console.log("✅ Table created");
   } catch (err) {
-    console.error("❌ Migration failed:", err.message);
+    console.error("❌ Migration failed:", err);
   } finally {
     await client.end();
   }
 }
 
 runMigration();
+
+
