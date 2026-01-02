@@ -14,6 +14,7 @@ router.post("/signup", async (req, res) => {
       company,
       "offer-agreement": offer,
       "privacy-agreement": privacy,
+      "marketing-agreement": marketing,
     } = req.body;
 
     // honeypot
@@ -31,10 +32,28 @@ router.post("/signup", async (req, res) => {
 
     await pool.query(
       `
-      INSERT INTO leads (name, email, phone, goal, message)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO leads (
+        name,
+        email,
+        phone,
+        goal,
+        message,
+        offer_agreement,
+        privacy_agreement,
+        marketing_agreement
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       `,
-      [name, email, phone, goal, message || null]
+      [
+        name,
+        email,
+        phone,
+        goal,
+        message || null,
+        true,
+        true,
+        marketing === "on",
+      ]
     );
 
     res.json({
@@ -51,3 +70,4 @@ router.post("/signup", async (req, res) => {
 });
 
 export default router;
+
