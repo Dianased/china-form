@@ -10,7 +10,7 @@ router.post("/signup", async (req, res) => {
       email,
       phone,
       goal,
-      msg,
+      message,
       company,
       "offer-agreement": offer,
       "privacy-agreement": privacy,
@@ -34,7 +34,7 @@ router.post("/signup", async (req, res) => {
       INSERT INTO leads (name, email, phone, goal, message)
       VALUES ($1, $2, $3, $4, $5)
       `,
-      [name, email, phone, goal, msg || null]
+      [name, email, phone, goal, message || null]
     );
 
     res.json({
