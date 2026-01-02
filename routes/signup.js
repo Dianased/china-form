@@ -6,9 +6,8 @@ const router = express.Router();
 router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
-    console.log("RAW BODY:", data);
+console.log("RAW BODY:", data);
 console.log("MESSAGE FIELD:", JSON.stringify(data.message));
-
     console.log("REQ BODY 👉", data);
 
     // honeypot
@@ -21,7 +20,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
-    const message = data.message ?? null;
+    const msg = data.message ?? null;
 
     // 🔹 определяем ФАКТ прихода чекбоксов
     const hasOfferAgreement =
@@ -71,7 +70,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
 
     // 🔹 запись в БД
     await pool.query(
-  `INSERT INTO leads (
+      `INSERT INTO leads (
     name, email, phone, goal, msg,
     offer_agreement, privacy_agreement, marketing_agreement
   ) VALUES ($1, $2, $3, $4, NULLIF($5, ''), $6, $7, $8)`,
@@ -80,7 +79,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
         email,
         phone,
         goal,
-        message,
+        msg,
         offerAgreement,
         privacyAgreement,
         marketingAgreement,
@@ -101,5 +100,4 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
 });
 
 export default router;
-
 
