@@ -1,76 +1,33 @@
 import express from "express";
-import pool from "../db.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import signupRouter from "./routes/signup.js";
 
-const router = express.Router();
+const app = express();
 
-router.post("/signup", async (req, res) => {
-  try {
-    const {
-      name,
-      email,
-      phone,
-      goal,
-      message,
-      company,
-      "offer-agreement": offer,
-      "privacy-agreement": privacy,
-      "marketing-agreement": marketing,
-    } = req.body;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    // honeypot
-    if (company) {
-      return res.json({ success: true, message: "OK" });
-    }
+/* ✅ СНАЧАЛА body parser */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    // обязательные поля
- if (
-   !name ||
-   !email ||
-   !phone ||
-   !goal ||
-   !req.body["offer-agreement"] ||
-   !req.body["privacy-agreement"]
- ) {
-   return res.status(400).json({
-     success: false,
-     message: "Заполните обязательные поля",
-   });
- }
 
-await pool.query(
-  `
-  INSERT INTO leads (
-    name, email, phone, goal, message,
-    offer_agreement, privacy_agreement, marketing_agreement
-  )
-  VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-  `,
-  [
-    name,
-    email,
-    phone,
-    goal,
-    message || null,
-    true,
-    true,
-    !!marketing || false,
-  ]
-);
+/* ✅ ПОТОМ роуты */
+app.use("/api", signupRouter);
 
-    res.json({
-      success: true,
-      message: "Спасибо! Заявка успешно отправлена.",
-    });
-  } catch (err) {
-    console.error("SIGNUP ERROR:", err);
-    res.status(500).json({
-      success: false,
-      message: "Ошибка сервера. Попробуйте позже.",
-    });
-  }
+/* ✅ И ТОЛЬКО ПОТОМ статика */
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-export default router;
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("🚀 Server started on port", PORT);
+});
+
 
 
 
