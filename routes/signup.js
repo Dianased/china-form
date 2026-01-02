@@ -7,7 +7,7 @@ router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
 console.log("RAW BODY:", data);
-console.log("MESSAGE FIELD:", JSON.stringify(data.msg));
+console.log("MESSAGE FIELD:", JSON.stringify(data.message));
     console.log("REQ BODY 👉", data);
 
     // honeypot
@@ -20,7 +20,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.msg));
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
-    const message = data.msg ?? null;
+    const message = data.message ?? null;
 
     // 🔹 определяем ФАКТ прихода чекбоксов
     const hasOfferAgreement =
@@ -71,7 +71,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.msg));
     // 🔹 запись в БД
     await pool.query(
       `INSERT INTO leads (
-    name, email, phone, goal, msg,
+    name, email, phone, goal, message,
     offer_agreement, privacy_agreement, marketing_agreement
   ) VALUES ($1, $2, $3, $4, NULLIF($5, ''), $6, $7, $8)`,
       [
