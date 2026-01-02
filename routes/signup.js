@@ -7,7 +7,7 @@ router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
 console.log("RAW BODY:", data);
-console.log("MESSAGE FIELD:", JSON.stringify(data.message));
+console.log("MESSAGE FIELD:", JSON.stringify(data.msg));
     console.log("REQ BODY 👉", data);
 
     // honeypot
