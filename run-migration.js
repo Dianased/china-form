@@ -11,7 +11,7 @@ async function runMigration() {
     await client.connect();
     console.log("✅ Connected to DB");
 
-    const sql = readFileSync("./migrations/001_create_leads.sql", "utf8");
+    const sql = readFileSync("./migrations/001_create_leads_table.sql", "utf8");
 
     await client.query(sql);
     console.log("✅ Table created");
