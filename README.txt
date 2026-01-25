@@ -1,3 +1,62 @@
+🌐 China — Landing Page for Intermediary/Blogger
+
+A single-page adaptive website for an intermediary, focused on lead generation.
+The full cycle is implemented: interface, lead form, and data saving to a database via Railway.
+
+🔗 Demo
+👉 View the website: hbjsdb.ru
+
+🖼 Preview
+Screenshots of the website are available in the Screenshots folder.
+
+✨ Features
+
+📱 Responsive Design
+Correct display on all devices — from mobile to desktop.
+
+📝 Lead Form with Database
+A lead collection form with validation and data storage in a database (Railway).
+
+🔍 SEO Optimization
+Meta tags, semantic headings, and image alt attributes are implemented.
+
+⚡ Fast Loading
+Optimized images and minified resources.
+
+🧠 What This Project Solves
+
+✔ Collecting client leads
+✔ Streamlined user experience
+✔ Production-ready
+✔ Scalability (new forms and pages can be added)
+
+🛠 Technologies Used
+
+HTML5 — semantic markup
+CSS3 — Flexbox, Grid, media queries, animations
+JavaScript — interactivity and form logic
+Railway — database for storing leads
+👩‍💻 About Me
+
+I am a versatile specialist:
+I handle UI design, layout, lead forms, and database integration.
+I deliver projects to a fully functional, production-ready state.
+
+I can assist with:
+
+Turnkey landing pages
+Lead and feedback forms
+UI / styling / responsiveness
+Database integration (Railway)
+Refining existing websites
+📩 Open to freelance work and projects
+
+🚀 How to Run the Project Locally
+
+Download or clone the repository
+Open the index.html file in your browser
+
+
 🌐 China — лендинг для посредника / блогера
 
 Одностраничный адаптивный сайт для посредника, ориентированный на сбор заявок.  
@@ -57,6 +116,7 @@
 
 1. Скачайте или клонируйте репозиторий  
 2. Откройте файл `index.html` в браузере
+
 
 
 
