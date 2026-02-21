@@ -53,7 +53,7 @@ router.post("/signup", async (req, res) => {
     if (!name || !email || !phone || !goal || !offerAgreement || !privacyAgreement) {
       return res.status(400).json({
         success: false,
-        message: "Заполните обязательные поля",
+        message: "Please fill in the required fields.",
       });
     }
 
@@ -84,7 +84,7 @@ router.post("/signup", async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Спасибо! Заявка успешно отправлена.",
+      message: "Thank you! Your request has been sent successfully.",
     });
 
   } catch (err) {
@@ -92,7 +92,7 @@ router.post("/signup", async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Ошибка сервера. Попробуйте позже.",
+      message: "Server error. Try again later.",
     });
   }
 });
