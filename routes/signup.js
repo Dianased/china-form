@@ -88,7 +88,7 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
 
     return res.json({
       success: true,
-      message: "Спасибо! Заявка успешно отправлена.",
+      message: "Thank you! Your request has been sent successfully.",
     });
   } catch (err) {
     console.error("SIGNUP ERROR:", err);
