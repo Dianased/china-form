@@ -3,77 +3,71 @@ import pool from "../db.js";
 
 const router = express.Router();
 
+// перевод значения в boolean
+const toBool = (v) => v === true || v === "true" || v === "on" || v === 1;
+
+// получение IP
+const getIP = (req) =>
+  req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+  req.socket?.remoteAddress ||
+  null;
+
 router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
-console.log("RAW BODY:", data);
-console.log("MESSAGE FIELD:", JSON.stringify(data.message));
+
     console.log("REQ BODY 👉", data);
 
-    // honeypot
+    // honeypot защита от ботов
     if (data.company) {
-      return res.json({ success: true, message: "OK" });
+      return res.json({ success: true });
     }
 
-    // 🔹 основные поля (поддержка разных имён)
+    // основные поля
     const name = data.name;
     const email = data.email;
     const phone = data.phone;
     const goal = data.goal || data.purpose;
-    const message = data.message ?? null;
+    const message = data.message ?? data.msg ?? null;
 
-    // 🔹 определяем ФАКТ прихода чекбоксов
-    const hasOfferAgreement =
-      data["offer-agreement"] !== undefined ||
-      data.offer !== undefined ||
-      data.offerAgreement !== undefined;
+    // чекбоксы
+    const offerAgreement = toBool(
+      data["offer-agreement"] ??
+      data.offer ??
+      data.offerAgreement
+    );
 
-    const hasPrivacyAgreement =
-      data["privacy-agreement"] !== undefined ||
-      data.privacy !== undefined ||
-      data.privacyAgreement !== undefined;
+    const privacyAgreement = toBool(
+      data["privacy-agreement"] ??
+      data.privacy ??
+      data.privacyAgreement
+    );
 
-    // 🔹 преобразуем в boolean
-    const offerAgreement =
-      data["offer-agreement"] === "on" ||
-      data["offer-agreement"] === "true" ||
-      data.offer === true ||
-      data.offerAgreement === true;
+    const marketingAgreement = toBool(
+      data["marketing-agreement"] ??
+      data.marketing ??
+      data.marketingAgreement
+    );
 
-    const privacyAgreement =
-      data["privacy-agreement"] === "on" ||
-      data["privacy-agreement"] === "true" ||
-      data.privacy === true ||
-      data.privacyAgreement === true;
-
-    const marketingAgreement =
-      data["marketing-agreement"] === "on" ||
-      data["marketing-agreement"] === "true" ||
-      data.marketing === true ||
-      data.marketingAgreement === true ||
-      false;
-
-    // 🔴 проверка обязательных полей (КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ)
-    if (
-      !name ||
-      !email ||
-      !phone ||
-      !goal ||
-      !hasOfferAgreement ||
-      !hasPrivacyAgreement
-    ) {
+    // обязательные поля
+    if (!name || !email || !phone || !goal || !offerAgreement || !privacyAgreement) {
       return res.status(400).json({
         success: false,
         message: "Заполните обязательные поля",
       });
     }
 
-    // 🔹 запись в БД
+    // ip + user agent
+    const ip = getIP(req);
+    const userAgent = req.headers["user-agent"] || null;
+
+    // запись в базу
     await pool.query(
       `INSERT INTO leads (
-    name, email, phone, goal, message,
-    offer_agreement, privacy_agreement, marketing_agreement
-  ) VALUES ($1, $2, $3, $4, NULLIF($5, ''), $6, $7, $8)`,
+        name, email, phone, goal, message,
+        offer_agreement, privacy_agreement, marketing_agreement,
+        ip, user_agent
+      ) VALUES ($1,$2,$3,$4,NULLIF($5,''),$6,$7,$8,$9,$10)`,
       [
         name,
         email,
@@ -83,15 +77,19 @@ console.log("MESSAGE FIELD:", JSON.stringify(data.message));
         offerAgreement,
         privacyAgreement,
         marketingAgreement,
+        ip,
+        userAgent,
       ]
     );
 
     return res.json({
       success: true,
-      message: "Thank you! Your request has been sent successfully.",
+      message: "Спасибо! Заявка успешно отправлена.",
     });
+
   } catch (err) {
     console.error("SIGNUP ERROR:", err);
+
     return res.status(500).json({
       success: false,
       message: "Ошибка сервера. Попробуйте позже.",
